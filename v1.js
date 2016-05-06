@@ -68,3 +68,4 @@ pubSub.on(object_id + ":change", function (event, attr_name, new_val, initiator)
         user.set(attr_name, new_val);
     }
 });
+
