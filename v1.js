@@ -1,7 +1,7 @@
 /**
  * Created by Administrator on 2016/5/6.
  */
-var object_id = "";
+var object_id = "123";
 var pubSub = {
     callbacks: {},
     on: function (msg, callback) {
@@ -23,6 +23,7 @@ var changeHandler = function (event) {
         prop_name = target.getAttribute(data_attr);
 
     if (prop_name && prop_name !== "") {
+        //发布事件
         pubSub.publish(message, prop_name, target.value);
     }
 };
@@ -49,4 +50,21 @@ pubSub.on(message, function (event, prop_name, new_val) {
         console.log("prop_name:" + new_val);
     }
     ;
-})
+});
+var user = {
+    attribute: {},
+    // 属性设置器使用数据绑定器pubSub来发布
+    set: function (attr_name, val) {
+        this.attribute[attr_name] = val;
+        pubSub.publish(object_id + ":change", attr_name, val, this);
+    },
+    get: function (attr_name) {
+        return this.attribute[attr_name];
+    }
+};
+//订阅事件
+pubSub.on(object_id + ":change", function (event, attr_name, new_val, initiator) {
+    if (initiator !== user) {
+        user.set(attr_name, new_val);
+    }
+});
