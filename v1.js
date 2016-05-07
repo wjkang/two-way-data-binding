@@ -20,7 +20,7 @@ var changeHandler = function (event) {
         prop_name = target.getAttribute("data-bind");
 
     if (prop_name && prop_name !== "") {
-        //发布事件
+        //发布事件（UI与user已经订阅此事件）
         pubSub.publish("name:change", prop_name, target.value);
     }
 };
