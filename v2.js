@@ -84,4 +84,4 @@ function User(uid) {
     return user;
 }
 var user = new User(123);
-user.set("name", "lwl");
+user.set("name", "wujunkang");
