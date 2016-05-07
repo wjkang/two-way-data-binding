@@ -9,8 +9,10 @@ var pubSub = {
     },
     publish: function (msg) {
         this.callbacks[msg] = this.callbacks[msg] || [];
+        //debugger;
         for (var i = 0, len = this.callbacks[msg].length; i < len; i++) {
             this.callbacks[msg][i].apply(this, arguments);
+            console.log(this.callbacks[msg][i]);
         }
         ;
     }
@@ -31,7 +33,7 @@ if (document.addEventListener) {
     // IE8使用attachEvent而不是addEventListenter
     document.attachEvent("onkeyup", changeHandler);
 }
-// 订阅事件
+// 订阅事件（事件发布的时候，所有UI都会改变）
 pubSub.on("name:change", function (event, prop_name, new_val) {
     var elements = document.querySelectorAll("[data-bind=" + prop_name + "]"),
         tag_name;
@@ -45,7 +47,7 @@ pubSub.on("name:change", function (event, prop_name, new_val) {
         }
 
     }
-    ;
+    //console.log(elements);
 });
 var user = {
     attribute: {},
@@ -58,7 +60,7 @@ var user = {
         return this.attribute[attr_name];
     }
 };
-//订阅事件,UI改变和调用user的set方法都会发布此事件
+//订阅事件,UI改变和调用user的set方法都会发布此事件(ui改变的时候会调用user set方法，user set又会再一次publish事件，UI多余的修改一次，user set不会再调用)
 pubSub.on("name:change", function (event, attr_name, new_val, initiator) {
     if (initiator !== user) {
         //UI发布的事件才调用
