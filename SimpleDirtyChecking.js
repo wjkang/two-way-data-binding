@@ -13,7 +13,6 @@ Scope.prototype.$watch=function(watchExp,listener){
     });
 };
 Scope.prototype.$digest=function(){
-    console.log("in");
    var dirty;
     do{
         dirty=false;
@@ -26,8 +25,11 @@ Scope.prototype.$digest=function(){
             if(newValue!==oldValue)
             {
                 this.$$watchers[i].listener(newValue,oldValue);
-                dirty=true;
                 this.$$watchers.last=newValue;
+            }
+            else
+            {
+                dirty=true;
             }
         }
     }while(dirty);
@@ -41,5 +43,27 @@ $scope.$watch(function(){
 },function(newValue,oldValue){
     console.log(newValue,oldValue);
 });
+//第一次循环Ryan!==undifined,Ryan复制给last,第二次循环脏值Flag设为true,不进行下一次循环再进行比较则相等，所以while循环了2次
 $scope.$digest();
+
+/*var element = document.querySelectorAll('input');
+
+element[0].onkeyup = function() {
+    $scope.name = element[0].value;
+
+    $scope.$digest();
+};
+
+$scope.$watch(function(){
+    return $scope.name;
+}, function( newValue, oldValue ) {
+    console.log('Input value updated - it is now ' + newValue);
+
+    element[0].value = $scope.name;
+} );
+
+var updateScopeValue = function updateScopeValue( ) {
+    $scope.name = 'Bob';
+    $scope.$digest();
+};*/
 
