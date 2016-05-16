@@ -9,7 +9,6 @@ var pubSub = {
     },
     publish: function (msg) {
         this.callbacks[msg] = this.callbacks[msg] || [];
-        //debugger;
         for (var i = 0, len = this.callbacks[msg].length; i < len; i++) {
             this.callbacks[msg][i].apply(this, arguments);
             console.log(this.callbacks[msg][i]);
@@ -60,7 +59,7 @@ var user = {
         return this.attribute[attr_name];
     }
 };
-//订阅事件,UI改变和调用user的set方法都会发布此事件(ui改变的时候会调用user set方法，user set又会再一次publish事件，UI多余的修改一次，user set不会再调用)
+//订阅事件,UI改变和调用user的set方法都会发布此事件(ui改变的时候会导致调用user set方法，user set又会再一次publish事件，UI多余的修改一次，user set不会再调用)
 pubSub.on("name:change", function (event, attr_name, new_val, initiator) {
     if (initiator !== user) {
         //UI发布的事件才调用
